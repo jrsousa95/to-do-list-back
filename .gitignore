@@ -1,0 +1,9 @@
+# Configurações do Visual Studio Code
+.vscode
+
+# Diretório de dependências e arquivos do NPM
+node_modules
+package-lock.json
+
+#.env
+.env
