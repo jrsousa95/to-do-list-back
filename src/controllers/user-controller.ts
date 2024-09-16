@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import { compare, hash } from "bcrypt";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
-import { sign } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
+import { ITokenPayload } from "middlewares/authMiddleware";
 
 const prisma = new PrismaClient();
 
@@ -37,7 +38,7 @@ export default {
 
     const hashedPassword = await hash(password, 8);
 
-    const user = await prisma.user.create({
+    await prisma.user.create({
       data: {
         name,
         email,
@@ -45,7 +46,9 @@ export default {
       },
     });
 
-    response.status(200).json({ message: "Usuário registrado com sucesso." });
+    return response
+      .status(201)
+      .json({ message: "Usuário criado com sucesso." });
   },
 
   login: async (request: Request, response: Response) => {
@@ -77,6 +80,32 @@ export default {
       }
     );
 
-    return response.status(200).json({ token });
+    const userView = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      token,
+    };
+
+    return response
+      .status(200)
+      .json({ message: "Login realizado.", user: userView });
+  },
+
+  validateToken: (request: Request, response: Response, next: NextFunction) => {
+    const { token } = request.body;
+
+    if (!token) {
+      return response.status(500).json({ error: "Token inválido" });
+    }
+
+    try {
+      const decoded = verify(token, SECRET_KEY) as ITokenPayload;
+
+      // request.user = decoded;
+      next();
+    } catch (error) {
+      response.status(500).json({ error: "Token inválido" });
+    }
   },
 };

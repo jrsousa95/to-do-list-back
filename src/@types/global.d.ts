@@ -1,4 +1,4 @@
-import { ITokenPayload } from "./../types/index";
+import { ITokenPayload } from "middlewares/authMiddleware";
 
 declare global {
   namespace Express {

@@ -29,26 +29,28 @@ export const taskController = {
     const { title } = request.body;
 
     // const userId = request.user?.id;
+
     const userId = 1;
 
     if (!userId) {
-      return response.status(400).json({ error: "Usuário não encontrado." });
+      return response.status(400).json({ error: "Usuário não encontrado" });
     }
 
-    const task = await prisma.task.create({
+    await prisma.task.create({
       data: {
         title,
         fk_user_id: userId,
       },
     });
 
-    response.status(201).json({
+    return response.status(201).json({
       message: "Tarefa criada com sucesso!",
     });
   },
 
   getTasks: async (request: Request, response: Response) => {
     // const userId = request.user?.id;
+
     const userId = 1;
 
     const tasks = await prisma.task.findMany({
@@ -56,6 +58,10 @@ export const taskController = {
         fk_user_id: userId,
       },
     });
+
+    if (!tasks) {
+      return response.status(400).json({ error: "Tarefas não encontradas" });
+    }
 
     const taskView = tasks.map((task) => {
       return {
@@ -65,7 +71,9 @@ export const taskController = {
       };
     });
 
-    response.status(200).json(taskView);
+    return response
+      .status(200)
+      .json({ message: "Tarefas encontradas", data: taskView });
   },
 
   updateTask: async (request: Request, response: Response) => {
@@ -73,14 +81,14 @@ export const taskController = {
 
     if (errorParams) {
       return response
-        .status(400)
+        .status(500)
         .json({ error: errorParams.details[0].message });
     }
 
     const { error } = taskUpdateSchema.validate(request.body);
 
     if (error) {
-      return response.status(400).json({ error: error.details[0].message });
+      return response.status(500).json({ error: error.details[0].message });
     }
 
     const { title, completed } = request.body;
@@ -97,7 +105,7 @@ export const taskController = {
       return response.status(400).json({ error: "Tarefa não encontrada." });
     }
 
-    const task = await prisma.task.update({
+    await prisma.task.update({
       where: {
         id: Number(id),
       },
@@ -107,9 +115,7 @@ export const taskController = {
       },
     });
 
-    response.status(200).json({
-      message: "Tarefa atualizada com sucesso!",
-    });
+    return response.status(200).json({ message: "Tarefa atualizada!" });
   },
 
   deleteTask: async (request: Request, response: Response) => {
@@ -137,8 +143,6 @@ export const taskController = {
       },
     });
 
-    response.status(200).json({
-      message: "Tarefa excluída com sucesso!",
-    });
+    return response.status(200).json({ message: "Tarefa excluída!" });
   },
 };

@@ -1,6 +1,11 @@
 import { verify } from "jsonwebtoken";
-import { ITokenPayload } from "../types";
 import { NextFunction, Request, Response } from "express";
+
+export interface ITokenPayload {
+  id: number;
+  name: string;
+  email: string;
+}
 
 const SECRET_KEY = "SECRET_KEY_JWT";
 
@@ -9,9 +14,7 @@ export const auth = {
     const token = request.header("Authorization")?.replace("Bearer ", "");
 
     if (!token) {
-      return response
-        .status(401)
-        .json({ error: "Acesso negado. Por favor, faca o login." });
+      return response.status(500).json({ error: "Token inválido" });
     }
 
     try {
@@ -20,7 +23,7 @@ export const auth = {
       // request.user = decoded;
       next();
     } catch (error) {
-      response.status(401).json({ error: "Token inválido." });
+      response.status(500).json({ error: "Token inválido" });
     }
   },
 };
