@@ -6,7 +6,6 @@ export interface ITokenPayload {
   name: string;
   email: string;
 }
-
 const SECRET_KEY = "SECRET_KEY_JWT";
 
 export const auth = {

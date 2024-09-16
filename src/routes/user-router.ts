@@ -5,6 +5,5 @@ const userRouter = Router();
 
 userRouter.post("/register", userController.register);
 userRouter.post("/login", userController.login);
-userRouter.post("/validate-token", userController.validateToken);
 
 export default userRouter;

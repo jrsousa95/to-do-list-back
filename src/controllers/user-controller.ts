@@ -91,21 +91,4 @@ export default {
       .status(200)
       .json({ message: "Login realizado.", user: userView });
   },
-
-  validateToken: (request: Request, response: Response, next: NextFunction) => {
-    const { token } = request.body;
-
-    if (!token) {
-      return response.status(500).json({ error: "Token inválido" });
-    }
-
-    try {
-      const decoded = verify(token, SECRET_KEY) as ITokenPayload;
-
-      // request.user = decoded;
-      next();
-    } catch (error) {
-      response.status(500).json({ error: "Token inválido" });
-    }
-  },
 };
