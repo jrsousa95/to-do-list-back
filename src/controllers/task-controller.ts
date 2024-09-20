@@ -28,9 +28,7 @@ export const taskController = {
 
     const { title } = request.body;
 
-    // const userId = request.user?.id;
-
-    const userId = 1;
+    const userId = request.user?.id;
 
     if (!userId) {
       return response.status(400).json({ error: "Usuário não encontrado" });
@@ -49,9 +47,7 @@ export const taskController = {
   },
 
   getTasks: async (request: Request, response: Response) => {
-    // const userId = request.user?.id;
-
-    const userId = 1;
+    const userId = request.user?.id;
 
     const tasks = await prisma.task.findMany({
       where: {
