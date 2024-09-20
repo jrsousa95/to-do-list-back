@@ -1,6 +1,6 @@
 /// <reference path="../@types/global.d.ts" />
-import { verify } from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
+import { verify } from "jsonwebtoken";
 
 export interface ITokenPayload {
   id: number;

@@ -1,9 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { compare, hash } from "bcrypt";
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import Joi from "joi";
-import { sign, verify } from "jsonwebtoken";
-import { ITokenPayload } from "middlewares/authMiddleware";
+import { sign } from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
