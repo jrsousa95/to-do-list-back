@@ -9,7 +9,7 @@ const app = express();
 
 // Configuração do CORS para permitir o front-end
 const corsOptions = {
-  origin: "http://localhost:5173", // Permite apenas o front-end rodando nessa porta
+  origin: "http://127.0.0.1:5173", // Permite apenas o front-end rodando nessa porta
   methods: ["GET", "POST", "PUT", "DELETE"], // Métodos HTTP permitidos
   credentials: true, // Se precisar enviar cookies ou autenticação via headers
 };
